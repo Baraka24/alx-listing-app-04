@@ -1,4 +1,5 @@
 import React from 'react';
+import Link from 'next/link';
 import { PropertyProps } from '@/interfaces';
 
 interface PropertyCardProps {
@@ -100,9 +101,11 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ property }) => {
               <span className="text-sm font-normal text-gray-600 ml-1">/ night</span>
             </div>
           </div>
-          <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors duration-200">
-            View Details
-          </button>
+          <Link href={`/property/${property.id}`}>
+            <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors duration-200">
+              View Details
+            </button>
+          </Link>
         </div>
       </div>
     </div>
