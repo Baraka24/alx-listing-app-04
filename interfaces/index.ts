@@ -11,6 +11,7 @@ export interface Offers {
 }
 
 export interface PropertyProps {
+  id?: string;
   name: string;
   address: Address;
   rating: number;
@@ -19,4 +20,43 @@ export interface PropertyProps {
   offers: Offers;
   image: string;
   discount: string;
+  description?: string;
+  amenities?: string[];
+  host?: {
+    name: string;
+    avatar?: string;
+    verified?: boolean;
+  };
+}
+
+export interface Review {
+  id: string;
+  userId: string;
+  userName: string;
+  userAvatar?: string;
+  rating: number;
+  comment: string;
+  date: string;
+}
+
+export interface BookingDetails {
+  propertyId: string;
+  userId?: string;
+  checkInDate: string;
+  checkOutDate: string;
+  guests: number;
+  totalPrice: number;
+  contactInfo: {
+    name: string;
+    email: string;
+    phone: string;
+  };
+  specialRequests?: string;
+}
+
+export interface BookingResponse {
+  id: string;
+  status: 'confirmed' | 'pending' | 'cancelled';
+  bookingDetails: BookingDetails;
+  confirmationNumber: string;
 }

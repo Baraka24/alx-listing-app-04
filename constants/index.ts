@@ -17,6 +17,7 @@ export const FILTER_LABELS = [
 
 export const PROPERTYLISTINGSAMPLE: PropertyProps []  =  [
   {
+    id: "property-1",
     name: "Villa Ocean Breeze",
     address: {
       state: "Seminyak",
@@ -35,6 +36,7 @@ export const PROPERTYLISTINGSAMPLE: PropertyProps []  =  [
     discount: ""
   },
   {
+    id: "property-2",
     name: "Mountain Escape Chalet",
     address: {
       state: "Aspen",
@@ -53,6 +55,7 @@ export const PROPERTYLISTINGSAMPLE: PropertyProps []  =  [
     discount: "30"
   },
   {
+    id: "property-3",
     name: "Cozy Desert Retreat",
     address: {
       state: "Palm Springs",
@@ -71,6 +74,7 @@ export const PROPERTYLISTINGSAMPLE: PropertyProps []  =  [
     discount: ""
   },
   {
+    id: "property-4",
     name: "City Lights Penthouse",
     address: {
       state: "New York",
@@ -89,6 +93,7 @@ export const PROPERTYLISTINGSAMPLE: PropertyProps []  =  [
     discount: "15"
   },
   {
+    id: "property-5",
     name: "Riverside Cabin",
     address: {
       state: "Queenstown",
