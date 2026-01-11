@@ -1,14 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { PropertyProps, Review } from '@/interfaces';
+import React, { useState } from 'react';
+import { PropertyProps } from '@/interfaces';
+import ReviewSection from './ReviewSection';
 
 interface PropertyDetailProps {
   property: PropertyProps;
 }
 
 const PropertyDetail: React.FC<PropertyDetailProps> = ({ property }) => {
-  const [reviews, setReviews] = useState<Review[]>([]);
-  const [reviewsLoading, setReviewsLoading] = useState(true);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
 
   // Mock additional images for gallery
@@ -18,28 +16,6 @@ const PropertyDetail: React.FC<PropertyDetailProps> = ({ property }) => {
     '/images/image 3.png',
     '/images/image 4.png'
   ];
-
-  useEffect(() => {
-    const fetchReviews = async () => {
-      if (!property.id) return;
-      
-      try {
-        setReviewsLoading(true);
-        const response = await axios.get(`/api/properties/${property.id}/reviews`);
-        setReviews(response.data);
-      } catch (error) {
-        console.error('Error fetching reviews:', error);
-      } finally {
-        setReviewsLoading(false);
-      }
-    };
-
-    fetchReviews();
-  }, [property.id]);
-
-  const averageRating = reviews.length > 0 
-    ? (reviews.reduce((sum, review) => sum + review.rating, 0) / reviews.length).toFixed(1)
-    : property.rating.toFixed(1);
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-8">
@@ -57,8 +33,8 @@ const PropertyDetail: React.FC<PropertyDetailProps> = ({ property }) => {
             <svg className="w-5 h-5 text-yellow-400 mr-1" fill="currentColor" viewBox="0 0 20 20">
               <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
             </svg>
-            <span className="font-medium">{averageRating}</span>
-            <span className="text-gray-500 ml-1">({reviews.length} reviews)</span>
+            <span className="font-medium">{property.rating.toFixed(1)}</span>
+            <span className="text-gray-500 ml-1">(Reviews)</span>
           </div>
           {property.discount && (
             <span className="bg-red-500 text-white px-3 py-1 rounded-md text-sm font-semibold">
@@ -168,59 +144,11 @@ const PropertyDetail: React.FC<PropertyDetailProps> = ({ property }) => {
           </div>
 
           {/* Reviews */}
-          <div className="mb-8">
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">
-              Reviews ({reviews.length})
-            </h2>
-            {reviewsLoading ? (
-              <div className="text-center py-4">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-2"></div>
-                <p className="text-gray-600">Loading reviews...</p>
-              </div>
-            ) : reviews.length > 0 ? (
-              <div className="space-y-6">
-                {reviews.slice(0, 6).map((review) => (
-                  <div key={review.id} className="border-b pb-6 last:border-b-0">
-                    <div className="flex items-start">
-                      <div className="flex-shrink-0 w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center mr-3">
-                        {review.userAvatar ? (
-                          <img src={review.userAvatar} alt={review.userName} className="w-full h-full rounded-full" />
-                        ) : (
-                          <span className="text-sm font-semibold text-gray-600">{review.userName.charAt(0)}</span>
-                        )}
-                      </div>
-                      <div className="flex-1">
-                        <div className="flex items-center mb-1">
-                          <span className="font-semibold text-gray-900 mr-2">{review.userName}</span>
-                          <div className="flex items-center">
-                            {[...Array(5)].map((_, i) => (
-                              <svg
-                                key={i}
-                                className={`w-4 h-4 ${i < review.rating ? 'text-yellow-400' : 'text-gray-300'}`}
-                                fill="currentColor"
-                                viewBox="0 0 20 20"
-                              >
-                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                              </svg>
-                            ))}
-                          </div>
-                        </div>
-                        <p className="text-gray-700 mb-1">{review.comment}</p>
-                        <p className="text-sm text-gray-500">{new Date(review.date).toLocaleDateString()}</p>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-                {reviews.length > 6 && (
-                  <button className="text-blue-600 hover:text-blue-800 font-medium">
-                    Show all {reviews.length} reviews
-                  </button>
-                )}
-              </div>
-            ) : (
-              <p className="text-gray-600">No reviews yet.</p>
-            )}
-          </div>
+          <ReviewSection 
+            propertyId={property.id || ''}
+            maxReviews={6}
+            className="mb-8"
+          />
         </div>
 
         {/* Booking Card */}
@@ -235,8 +163,8 @@ const PropertyDetail: React.FC<PropertyDetailProps> = ({ property }) => {
                 <svg className="w-4 h-4 text-yellow-400 mr-1" fill="currentColor" viewBox="0 0 20 20">
                   <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                 </svg>
-                <span className="font-medium">{averageRating}</span>
-                <span className="text-gray-500 ml-1">({reviews.length} reviews)</span>
+                <span className="font-medium">{property.rating.toFixed(1)}</span>
+                <span className="text-gray-500 ml-1">(Reviews)</span>
               </div>
             </div>
 
