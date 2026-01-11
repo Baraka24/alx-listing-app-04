@@ -101,11 +101,18 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ property }) => {
               <span className="text-sm font-normal text-gray-600 ml-1">/ night</span>
             </div>
           </div>
-          <Link href={`/property/${property.id}`}>
-            <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors duration-200">
-              View Details
-            </button>
-          </Link>
+          <div className="flex gap-2">
+            <Link href={`/property/${property.id}`}>
+              <button className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200">
+                Details
+              </button>
+            </Link>
+            <Link href={`/booking?propertyId=${property.id}&checkIn=${new Date().toISOString().split('T')[0]}&checkOut=${new Date(Date.now() + 86400000).toISOString().split('T')[0]}&guests=2`}>
+              <button className="bg-green-600 hover:bg-green-700 text-white px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200">
+                Book
+              </button>
+            </Link>
+          </div>
         </div>
       </div>
     </div>
